@@ -81,4 +81,3 @@
        (filter eq-triplet-sum? (unique-ordered-triplets s))))
 
 (ordered-triplets 10)
-
