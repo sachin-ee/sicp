@@ -1,5 +1,5 @@
 My attempt at completing the wizard book.
-I tried to complete most of the problems, if not all.
+Have solutions to most problems but not all.
 
 Tools used:
 
