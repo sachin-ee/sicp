@@ -1,5 +1,7 @@
 #lang simply-scheme
 
+;;; 2.56
+
 (define (=number? exp num) (and (number? exp) (= exp num)))
 
 (define (variable? x) (symbol? x))
@@ -28,8 +30,6 @@
 (define (product? x) (and (pair? x) (eq? (car x) '*)))
 (define (multiplier p) (cadr p))
 (define (multiplicand p) (caddr p))
-
-;;; 2.56
 
 (define (make-exponentiation base exp)
   (cond ((=number? exp 0) 1)

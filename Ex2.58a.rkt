@@ -1,6 +1,8 @@
 #lang simply-scheme
 
-;;; 2.57
+;;; 2.58
+
+;; a.
 
 (define (=number? exp num) (and (number? exp) (= exp num)))
 
@@ -14,41 +16,32 @@
         ((=number? a2 0) a1)
         ((and (number? a1) (number? a2))
          (+ a1 a2))
-        (else (list '+ a1 a2))))
+        (else (list a1 '+ a2))))
 
 (define (make-product m1 m2)
   (cond ((or (=number? m1 0) (=number? m2 0)) 0)
         ((=number? m1 1) m2)
         ((=number? m2 1) m1)
         ((and (number? m1) (number? m2)) (* m1 m2))
-        (else (list '* m1 m2))))
+        (else (list m1 '* m2))))
 
+(define (sum? x) (and (pair? x) (eq? (cadr x) '+)))
+(define (addend s) (car s))
+(define (augend s) (caddr s))
 
-(define (sum? x) (and (pair? x) (eq? (car x) '+)))
-(define (addend s) (cadr s))
-(define (augend s) (if (null? (cddr s))
-                       0
-                       (if (null? (cdddr s))
-                           (caddr s)
-                           (append (list '+) (cddr s)))))
-
-(define (product? x) (and (pair? x) (eq? (car x) '*)))
-(define (multiplier p) (cadr p))
-(define (multiplicand p) (if (null? (cddr p))
-                             1
-                             (if (null? (cdddr p))
-                                 (caddr p)
-                                 (append (list '*) (cddr p)))))
+(define (product? x) (and (pair? x) (eq? (cadr x) '*)))
+(define (multiplier p) (car p))
+(define (multiplicand p) (caddr p))
 
 (define (make-exponentiation base exp)
   (cond ((=number? exp 0) 1)
         ((=number? exp 1) base)
         ((and (number? base) (number? exp)) (expt base exp))
-        (else (list '** base exp))))
+        (else (list base '** exp))))
 
-(define (base e) (cadr e))
+(define (base e) (car e))
 (define (exponent e) (caddr e))
-(define (exponentiation? x) (and (pair? x) (eq? (car x) '**)))
+(define (exponentiation? x) (and (pair? x) (eq? (cadr x) '**)))
 
 (define (deriv exp var)
   (cond ((number? exp) 0)
@@ -70,9 +63,8 @@
          (error "unknown expression type: DERIV" exp))))
 
 
-(deriv '(+ x 3) 'x)
-(deriv '(* x y) 'x)
-(deriv '(* (* x y) (+ x 3)) 'x)
-(deriv '(* 3 (** x 2)) 'x)
-(deriv '(** x 5) 'x)
-(deriv '(* x y (+ x 3)) 'x)
+(deriv '(x + 3) 'x)
+(deriv '(x * y) 'x)
+(deriv '((x * y) * (x + 3)) 'x)
+(deriv '(3 * (x ** 2)) 'x)
+(deriv '(x ** 5) 'x)
